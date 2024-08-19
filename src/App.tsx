@@ -70,7 +70,13 @@ function App() {
           >
             <button
               id="break-decrement"
-              onClick={() => setbreakl((prevBreakl) => prevBreakl - 1)}
+              onClick={() => {
+                setbreakl((prevsessionl) => {
+                  const newSessionl = prevsessionl - 1;
+                  setsessiontime(newSessionl * 60);
+                  return newSessionl;
+                });
+              }}
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -86,7 +92,13 @@ function App() {
             <button
               id="break-increment"
               className="text-white"
-              onClick={() => setbreakl((prevBreakl) => prevBreakl + 1)}
+              onClick={() => {
+                setbreakl((prevsessionl) => {
+                  const newSessionl = prevsessionl + 1;
+                  setsessiontime(newSessionl * 60);
+                  return newSessionl;
+                });
+              }}
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
