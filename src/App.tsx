@@ -2,11 +2,19 @@ import { useEffect } from "react";
 
 import "./App.css";
 import { useState } from "react";
+
+function formatTime(seconds: number) {
+  const minutes = Math.floor(seconds / 60);
+  const remainingSeconds = seconds % 60;
+
+  return `${("0" + minutes).slice(-2)}:${("0" + remainingSeconds).slice(-2)}`;
+}
+
 function App() {
   const [breakl, setbreakl] = useState(5);
   const [sessionl, setsessionl] = useState(25);
   const [Running, setRunning] = useState(false);
-  const [sessiontime, setsessiontime] = useState(sessionl);
+  const [sessiontime, setsessiontime] = useState(1500);
   const [breaktime, setbreaktime] = useState(breakl);
 
   useEffect(() => {
@@ -25,6 +33,7 @@ function App() {
     }
     return () => clearInterval(interval);
   }, [Running]);
+
   return (
     <>
       <header>
@@ -110,7 +119,7 @@ function App() {
       <div className="time-label border-solid border-8 border-[#13353a] rounded-[50px]	">
         <div className="timewrapper">
           <div className="head">Session</div>
-          <div className="currenttime">{sessiontime}</div>
+          <div className="currenttime">{formatTime(sessiontime)}</div>
         </div>
       </div>
       <div className="timer-control">
