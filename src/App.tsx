@@ -14,8 +14,9 @@ function App() {
   const [breakl, setbreakl] = useState(5);
   const [sessionl, setsessionl] = useState(25);
   const [Running, setRunning] = useState(false);
-  const [sessiontime, setsessiontime] = useState(1500);
+  const [sessiontime, setsessiontime] = useState(sessionl * 60);
   const [breaktime, setbreaktime] = useState(breakl);
+  const handlereset = () => [setsessiontime(1500)];
 
   useEffect(() => {
     let interval: number;
@@ -37,16 +38,16 @@ function App() {
   return (
     <>
       <header>
-        <h1 className=" p-5">25 + 5 Clock</h1>
+        <h1 className="p-5">25 + 5 Clock</h1>
       </header>
       <div className="clockcontainer grid grid-cols-2 gap-12 p-5">
         <div className="break-len-cont">
-          <div id="break-label" className="break  text-3xl 	">
+          <div id="break-label" className="break text-3xl">
             Break Length
           </div>
           <div
             id="break-length"
-            className=" text-2xl  flex justify-center items-center gap-2"
+            className="flex items-center justify-center gap-2 text-2xl"
           >
             <button
               id="break-decrement"
@@ -65,7 +66,7 @@ function App() {
             {breakl}
             <button
               id="break-increment"
-              className=" text-white "
+              className="text-white"
               onClick={() => setbreakl((prevBreakl) => prevBreakl + 1)}
             >
               <svg
@@ -81,16 +82,22 @@ function App() {
           </div>
         </div>
         <div className="session-len-cont">
-          <div id="session-label" className="  text-3xl">
+          <div id="session-label" className="text-3xl">
             Session Length
           </div>
           <div
             id="session-length"
-            className=" text-2xl flex justify-center items-center gap-2"
+            className="flex items-center justify-center gap-2 text-2xl"
           >
             <button
               id="session-decrement"
-              onClick={() => setsessionl((prevsessionl) => prevsessionl - 1)}
+              onClick={() => {
+                setsessionl((prevsessionl) => {
+                  const newSessionl = prevsessionl - 1;
+                  setsessiontime(newSessionl * 60);
+                  return newSessionl;
+                });
+              }}
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -105,7 +112,13 @@ function App() {
             {sessionl}
             <button
               id="session-increment"
-              onClick={() => setsessionl((prevsessionl) => prevsessionl + 1)}
+              onClick={() => {
+                setsessionl((prevsessionl) => {
+                  const newSessionl = prevsessionl + 1;
+                  setsessiontime(newSessionl * 60);
+                  return newSessionl;
+                });
+              }}
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -120,7 +133,7 @@ function App() {
           </div>
         </div>
       </div>
-      <div className="time-label border-solid border-8 border-[#13353a] rounded-[50px]	">
+      <div className="time-label rounded-[50px] border-8 border-solid border-[#13353a]">
         <div className="timewrapper">
           <div className="head text-[30px]">Session</div>
           <div className="currenttime text-[80px]">
@@ -130,7 +143,37 @@ function App() {
       </div>
       <div className="timer-control">
         <button className="start-stop" onClick={() => setRunning(true)}>
-          Start
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 24 24"
+            width="48"
+            height="48"
+            fill="currentColor"
+          >
+            <path d="M8 18.3915V5.60846L18.2264 12L8 18.3915ZM6 3.80421V20.1957C6 20.9812 6.86395 21.46 7.53 21.0437L20.6432 12.848C21.2699 12.4563 21.2699 11.5436 20.6432 11.152L7.53 2.95621C6.86395 2.53993 6 3.01878 6 3.80421Z"></path>
+          </svg>
+        </button>
+        <button className="start-stop" onClick={() => setRunning(false)}>
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 24 24"
+            width="48"
+            height="48"
+            fill="currentColor"
+          >
+            <path d="M5 5H19V19H5V5ZM4 3C3.44772 3 3 3.44772 3 4V20C3 20.5523 3.44772 21 4 21H20C20.5523 21 21 20.5523 21 20V4C21 3.44772 20.5523 3 20 3H4Z"></path>
+          </svg>
+        </button>
+        <button className="reset" onClick={handlereset}>
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 24 24"
+            width="48"
+            height="48"
+            fill="currentColor"
+          >
+            <path d="M5.46257 4.43262C7.21556 2.91688 9.5007 2 12 2C17.5228 2 22 6.47715 22 12C22 14.1361 21.3302 16.1158 20.1892 17.7406L17 12H20C20 7.58172 16.4183 4 12 4C9.84982 4 7.89777 4.84827 6.46023 6.22842L5.46257 4.43262ZM18.5374 19.5674C16.7844 21.0831 14.4993 22 12 22C6.47715 22 2 17.5228 2 12C2 9.86386 2.66979 7.88416 3.8108 6.25944L7 12H4C4 16.4183 7.58172 20 12 20C14.1502 20 16.1022 19.1517 17.5398 17.7716L18.5374 19.5674Z"></path>
+          </svg>
         </button>
       </div>
     </>
