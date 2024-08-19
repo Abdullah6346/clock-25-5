@@ -15,7 +15,8 @@ function App() {
   const [sessionl, setsessionl] = useState(25);
   const [Running, setRunning] = useState(false);
   const [sessiontime, setsessiontime] = useState(sessionl * 60);
-  const [breaktime, setbreaktime] = useState(breakl);
+  const [breaktime, setbreaktime] = useState(breakl * 60);
+  const [sessionEnded, setsessionEnded] = useState(false);
   const handlereset = () => [setsessiontime(1500)];
 
   useEffect(() => {
@@ -27,6 +28,7 @@ function App() {
             return prevTime - 1;
           } else {
             clearInterval(interval);
+            setsessionEnded(true);
             return 0;
           }
         });
@@ -34,6 +36,23 @@ function App() {
     }
     return () => clearInterval(interval);
   }, [Running]);
+  useEffect(() => {
+    let interval: number;
+    if (sessionEnded) {
+      interval = setInterval(() => {
+        setbreaktime((prevTime) => {
+          if (prevTime > 0) {
+            return prevTime - 1;
+          } else {
+            clearInterval(interval);
+            setsessiontime(sessionl * 60);
+            return 0;
+          }
+        });
+      }, 1000);
+    }
+    return () => clearInterval(interval);
+  }, [sessionEnded]);
 
   return (
     <>
@@ -135,9 +154,14 @@ function App() {
       </div>
       <div className="time-label rounded-[50px] border-8 border-solid border-[#13353a]">
         <div className="timewrapper">
-          <div className="head text-[30px]">Session</div>
+          {sessiontime != 0 ? (
+            <div className="head text-[30px]">Session</div>
+          ) : null}
+          {sessiontime == 0 ? (
+            <div className="head text-[30px]">Break Time</div>
+          ) : null}
           <div className="currenttime text-[80px]">
-            {formatTime(sessiontime)}
+            {sessiontime != 0 ? formatTime(sessiontime) : formatTime(breaktime)}
           </div>
         </div>
       </div>
